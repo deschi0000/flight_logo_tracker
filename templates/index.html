@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Overhead Aircraft Livery Viewer</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; color: #333; }
+        .card { background: #f9f9f9; border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        img { max-width: 100%; height: auto; display: block; margin-top: 15px; }
+        .error { color: #d9534f; }
+    </style>
+</head>
+<body>
+
+    <h1>Live Overhead Aircraft</h1>
+
+    <div class="card">
+        <h3>Telemetry Packet</h3>
+        <p><strong>Flight / Callsign:</strong> {{ raw_data.flight }}</p>
+        <p><strong>Registration:</strong> {{ raw_data.r }}</p>
+        <p><strong>Parsed Airline ICAO:</strong> {{ airline_icao }}</p>
+        <p><strong>Aircraft Type Code:</strong> {{ aircraft_type }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Local Logo Render</h3>
+        {% if logo_filename %}
+            <p>Loaded local file: <strong>{{ logo_filename }}</strong></p>
+            <img src="/logos/{{ logo_filename }}" alt="Airline Logo">
+        {% else %}
+            <p class="error">No local logo found for airline ICAO: <strong>{{ airline_icao }}</strong></p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
