@@ -1,4 +1,5 @@
 import os
+from aircraft_data import COMMERCIAL_AIRCRAFT_FAMILIES
 import requests
 from flask import Flask, render_template, send_from_directory
 
@@ -35,6 +36,8 @@ def index():
       if aircraft_list:
         # Pick the first aircraft from the live feed
         raw_data = aircraft_list[0]
+
+        print(f'RAW DATA: {raw_data}')
 
         callsign = raw_data.get("flight", "").strip()
         aircraft_type = raw_data.get("t")
