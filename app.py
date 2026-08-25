@@ -55,6 +55,7 @@ def index():
             f"DEBUG -> Callsign: '{callsign}', ICAO: '{airline_icao}', Type:"
             f" '{aircraft_type}', Logo File: '{logo_filename}', Found Locally:"
             f" {has_local_logo}"
+            f" PNG TYPE: {COMMERCIAL_AIRCRAFT_FAMILIES[aircraft_type]}"
         )
       else:
         print("API returned 200, but no aircraft currently found in range.")
