@@ -4,7 +4,7 @@ import requests
 from flask import Flask, render_template, send_from_directory
 
 # Tell Flask where your local logos folder is located
-app = Flask(__name__, static_folder="logos")
+app = Flask(__name__, static_folder="static")
 
 # Coordinates for Sursee / Central Switzerland and radius in nautical miles
 LAT = 47.17
@@ -20,6 +20,8 @@ def index():
   aircraft_type = "N/A"
   logo_filename = None
   has_local_logo = False
+  pure_type = "N/A"
+  livery_png_type_name = "N/A"
 
   headers = {"User-Agent": "FlightLogoTracker/1.0"}
 
@@ -41,21 +43,29 @@ def index():
 
         callsign = raw_data.get("flight", "").strip()
         aircraft_type = raw_data.get("t")
+        pure_type = COMMERCIAL_AIRCRAFT_FAMILIES[aircraft_type] # Get the type from the dict
+        
 
         # 1. Parse and sanitize callsign to get airline ICAO code (Uppercase for your logo filenames)
         airline_icao = "".join([c for c in callsign if c.isalpha()])[:3].upper()
 
-        # 2. Check if the local file exists in the 'logos' folder
+        #1.5 Get the file name if it exists
+        livery_png_type_name = airline_icao + '_' + pure_type + '.png'
+
+        # 2. Check if the local file exists in the 'static/logos' folder
         logo_filename = f"{airline_icao}.png"
-        logo_path = os.path.join("logos", logo_filename)
+        logo_path = os.path.join("static", "logos", logo_filename)  # <--- Updated path
         has_local_logo = os.path.exists(logo_path)
 
-        print(f"Checking for logo at: {logo_path} -> Found: {has_local_logo}")
+        # print(f"Checking for logo at: {logo_path} -> Found: {has_local_logo}")
         print(
-            f"DEBUG -> Callsign: '{callsign}', ICAO: '{airline_icao}', Type:"
-            f" '{aircraft_type}', Logo File: '{logo_filename}', Found Locally:"
-            f" {has_local_logo}"
-            f" PNG TYPE: {COMMERCIAL_AIRCRAFT_FAMILIES[aircraft_type]}"
+            f"DEBUG -> Callsign: {callsign}\n" 
+            f"ICAO: {airline_icao}\n" 
+            f"Type: {aircraft_type}\n" 
+            f"Logo File: {logo_filename}\n"
+            f"Found Locally:{has_local_logo}\n"
+            f"PNG Type: {pure_type}\n"
+            f"PNG file name: {livery_png_type_name}\n"
         )
       else:
         print("API returned 200, but no aircraft currently found in range.")
@@ -81,14 +91,17 @@ def index():
       raw_data=raw_data,
       airline_icao=airline_icao,
       aircraft_type=aircraft_type,
+      png_filename = livery_png_type_name if livery_png_type_name else None,
       logo_filename=logo_filename if has_local_logo else None,
   )
 
 
 # Route to serve the images from the logos folder directly
-@app.route("/logos/<path:filename>")
-def serve_logo(filename):
-  return send_from_directory("logos", filename)
+# This would have skirted looking into the 'static' folder
+# Instead checking the same level 'logos' folder!
+# @app.route("/logos/<path:filename>")
+# def serve_logo(filename):
+#   return send_from_directory("logos", filename)
 
 
 if __name__ == "__main__":

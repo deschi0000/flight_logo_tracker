@@ -26,10 +26,18 @@
         <h3>Local Logo Render</h3>
         {% if logo_filename %}
             <p>Loaded local file: <strong>{{ logo_filename }}</strong></p>
-            <img src="/logos/{{ logo_filename }}" alt="Airline Logo">
+            <img src="static/logos/{{ logo_filename }}" alt="Airline Logo">
         {% else %}
             <p class="error">No local logo found for airline ICAO: <strong>{{ airline_icao }}</strong></p>
         {% endif %}
+
+        {% if png_filename %}
+            <p>Loaded local file: <strong>{{ logo_filename }}</strong></p>
+            <img src="static/liveries/{{ airline_icao }}/{{ png_filename }}" alt="Airline Livery">
+        {% else %}
+            <p class="error">No PNG found: <strong>{{ airline_icao }}</strong></p>
+        {% endif %}
+
     </div>
 
 </body>
