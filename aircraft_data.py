@@ -69,6 +69,8 @@ COMMERCIAL_AIRCRAFT_FAMILIES = {
     # ==========================================
     # 4. EMBRAER & REGIONAL JETS
     # ==========================================
+    "E120": "EM2",  # Embraer EMB 120 Brasilia (ICAO)
+    "EM2": "EM2",   # Embraer EMB 120 Brasilia (IATA)
     "E135": "ERJ",
     "E145": "ERJ",
     "ERJ": "ERJ",  # General ERJ category
@@ -94,12 +96,23 @@ COMMERCIAL_AIRCRAFT_FAMILIES = {
     "DH8C": "DH8",
     "DH8D": "DH8",
     "DH8": "DH8",  # Dash 8 family
+    "BE9L": "BE9",  # Beechcraft King Air 90 (turboprop twin)
+    "BE9T": "BE9",  # Beechcraft King Air 90 variants
+    "BE9": "BE9",   # Beechcraft 90/99 series
+    "BE20": "BE9",  # Often grouped or mapped if using a broad twin turboprop asset
+    "S20": "S20",  # Saab 2000
+    "SB20": "S20",  # Saab 2000 alternative ICAO code
     # ==========================================
     # 6. CLASSICS & OTHERS (BAe, MD, Fokker)
     # ==========================================
-    "AR1": "146",  # Avro RJ85 / RJ100
-    "146": "146",  # BAe 146
-    "M80": "M80",  # McDonnell Douglas MD-80 series
+    "AR1": "146",   # Avro RJ85 / RJ100
+    "146": "146",   # BAe 146
+    "M80": "M80",   # McDonnell Douglas MD-80 series
     "MD80": "M80",
-    "F70": "F70",  # Fokker 70
+    "DC10": "DC10", # McDonnell Douglas DC-10
+    "D10": "DC10",  # Short code / IATA mapping
+    "MD10": "DC10", # Upgraded MD-10 variant
+    "F70": "F70",   # Fokker 70
+    "F50": "F50",   # Fokker 50
+    
 }
