@@ -2,6 +2,7 @@ import os
 from aircraft_data import COMMERCIAL_AIRCRAFT_FAMILIES
 import requests
 from flask import Flask, render_template, send_from_directory
+from datetime import datetime
 
 # Tell Flask where your local logos folder is located
 app = Flask(__name__, static_folder="static")
@@ -15,6 +16,11 @@ ADSB_URL = f"https://api.adsb.lol/v2/point/{LAT}/{LON}/{RADIUS}"
 
 @app.route("/")
 def index():
+
+  # Check if it's currently daytime (e.g., between 6:00 AM and 8:00 PM)
+  current_hour = datetime.now().hour
+  is_daylight = 6 <= current_hour < 20
+
   raw_data = None
   airline_icao = "N/A"
   aircraft_type = "N/A"
@@ -93,6 +99,7 @@ def index():
       aircraft_type=aircraft_type,
       png_filename = livery_png_type_name if livery_png_type_name else None,
       logo_filename=logo_filename if has_local_logo else None,
+      is_daylight=is_daylight
   )
 
 

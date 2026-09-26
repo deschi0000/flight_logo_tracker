@@ -4,13 +4,49 @@
     <meta charset="UTF-8">
     <title>Overhead Aircraft Livery Viewer</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; color: #333; }
-        .card { background: #f9f9f9; border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        img { max-width: 100%; height: auto; display: block; margin-top: 15px; }
-        .error { color: #d9534f; }
+        body { 
+            font-family: sans-serif; 
+            max-width: 600px; 
+            margin: 40px auto; 
+            padding: 0 20px; 
+            transition: background-color 0.5s ease;
+        }
+        .card { 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+        }
+        img { 
+            max-width: 100%; 
+            height: auto; 
+            display: block; 
+            margin-top: 15px; 
+        }
+
+        /* Day Theme Styles */
+        body.day {
+            background-color: #e3f2fd;
+            color: #333;
+        }
+        body.day .card {
+            background: #f2faff;
+            border: 1px solid #ddd;
+        }
+        body.day .error { color: #d9534f; }
+
+        /* Night Theme Styles */
+        body.night {
+            background-color: #0b1329;
+            color: #f1f5f9;
+        }
+        body.night .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+        body.night .error { color: #f87171; }
     </style>
 </head>
-<body>
+<body class="{{ 'day' if is_daylight else 'night' }}">
 
     <h1>Live Overhead Aircraft</h1>
 
@@ -26,25 +62,18 @@
         <h3>Local Logo Render</h3>
         {% if logo_filename %}
             <p>Loaded local file: <strong>{{ logo_filename }}</strong></p>
-            <img src="static/logos/{{ logo_filename }}" alt="Airline Logo">
+            <img src="/static/logos/{{ logo_filename }}" alt="Airline Logo">
         {% else %}
             <p class="error">No local logo found for airline ICAO: <strong>{{ airline_icao }}</strong></p>
         {% endif %}
 
         {% if png_filename %}
-            <p>Loaded local file: <strong>{{ logo_filename }}</strong></p>
-            <img src="static/liveries/{{ airline_icao }}/{{ png_filename }}" alt="Airline Livery">
+            <p>Loaded local file: <strong>{{ png_filename }}</strong></p>
+            <img src="/static/liveries/{{ airline_icao }}/{{ png_filename }}" alt="Airline Livery">
         {% else %}
             <p class="error">No PNG found: <strong>{{ airline_icao }}</strong></p>
         {% endif %}
-
     </div>
 
 </body>
-
 </html>
-<!-- <script>
-    setTimeout(function(){
-        window.location.reload();
-    }, 30000); // 30000 milliseconds = 30 seconds
-</script> -->
