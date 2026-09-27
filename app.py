@@ -47,6 +47,12 @@ def index():
 
         print(f'RAW DATA: {raw_data}')
 
+        print(f'type: {type(aircraft_list)}')
+        altitude_check_list = [(i["flight"], i["alt_baro"]) for i in aircraft_list]
+        print(altitude_check_list)
+
+        
+
         callsign = raw_data.get("flight", "").strip()
         aircraft_type = raw_data.get("t")
         pure_type = COMMERCIAL_AIRCRAFT_FAMILIES[aircraft_type] # Get the type from the dict
