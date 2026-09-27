@@ -16,33 +16,30 @@
             border-radius: 8px; 
             margin-bottom: 20px; 
         }
-        img { 
+        
+        /* The smooth transition wrapper */
+        #fade-wrapper {
+            transition: opacity 0.8s ease-in-out;
+            opacity: 1;
+        }
+        #fade-wrapper.fade-out {
+            opacity: 0;
+        }
+
+        img.plane { 
             max-width: 100%; 
             height: auto; 
             display: block; 
             margin-top: 15px; 
         }
 
-        /* Day Theme Styles */
-        body.day {
-            background-color: #e3f2fd;
-            color: #333;
-        }
-        body.day .card {
-            background: #f2faff;
-            border: 1px solid #ddd;
-        }
+        /* Day / Night Theme Styles */
+        body.day { background-color: #e3f2fd; color: #333; }
+        body.day .card { background: #f2faff; border: 1px solid #ddd; }
         body.day .error { color: #d9534f; }
 
-        /* Night Theme Styles */
-        body.night {
-            background-color: #0b1329;
-            color: #f1f5f9;
-        }
-        body.night .card {
-            background: #1e293b;
-            border: 1px solid #334155;
-        }
+        body.night { background-color: #0b1329; color: #f1f5f9; }
+        body.night .card { background: #1e293b; border: 1px solid #334155; }
         body.night .error { color: #f87171; }
     </style>
 </head>
@@ -50,30 +47,72 @@
 
     <h1>Live Overhead Aircraft</h1>
 
-    <div class="card">
-        <h3>Telemetry Packet</h3>
-        <p><strong>Flight / Callsign:</strong> {{ raw_data.flight }}</p>
-        <p><strong>Registration:</strong> {{ raw_data.r }}</p>
-        <p><strong>Parsed Airline ICAO:</strong> {{ airline_icao }}</p>
-        <p><strong>Aircraft Type Code:</strong> {{ aircraft_type }}</p>
+    <!-- Everything you want to transition is wrapped inside this div -->
+    <div id="fade-wrapper">
+        <div class="card">
+            <h3>Telemetry Packet</h3>
+            <p><strong>Flight / Callsign:</strong> <span id="flight-val">Loading...</span></p>
+            <p><strong>Registration:</strong> <span id="reg-val">Loading...</span></p>
+            <p><strong>Parsed Airline ICAO:</strong> <span id="icao-val">Loading...</span></p>
+            <p><strong>Aircraft Type Code:</strong> <span id="type-val">Loading...</span></p>
+        </div>
+
+        <div class="card" id="image-container">
+            <!-- Dynamic Image or Error will be injected here -->
+        </div>
     </div>
 
-    <div class="card">
-        <h3>Local Logo Render</h3>
-        {% if logo_filename %}
-            <p>Loaded local file: <strong>{{ logo_filename }}</strong></p>
-            <img src="/static/logos/{{ logo_filename }}" alt="Airline Logo">
-        {% else %}
-            <p class="error">No local logo found for airline ICAO: <strong>{{ airline_icao }}</strong></p>
-        {% endif %}
+    <script>
+        let currentFlight = "";
+        let pollInterval = null;
+        const POLL_TIME = 60000; // Check every 30 seconds instead of 10
 
-        {% if png_filename %}
-            <p>Loaded local file: <strong>{{ png_filename }}</strong></p>
-            <img src="/static/liveries/{{ airline_icao }}/{{ png_filename }}" alt="Airline Livery">
-        {% else %}
-            <p class="error">No PNG found: <strong>{{ airline_icao }}</strong></p>
-        {% endif %}
-    </div>
+        function fetchAircraftUpdate() {
+            // Don't fetch if the tab isn't currently visible to the user
+            if (document.hidden) return;
+
+            fetch('/api/current-aircraft')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.flight !== currentFlight) {
+                        currentFlight = data.flight;
+                        
+                        const wrapper = document.getElementById('fade-wrapper');
+                        wrapper.classList.add('fade-out');
+
+                        setTimeout(() => {
+                            document.getElementById('flight-val').innerText = data.flight;
+                            document.getElementById('reg-val').innerText = data.registration;
+                            document.getElementById('icao-val').innerText = data.airline_icao;
+                            document.getElementById('type-val').innerText = data.aircraft_type;
+
+                            const imgContainer = document.getElementById('image-container');
+                            if (data.png_filename) {
+                                imgContainer.innerHTML = `<img class="plane" src="/static/liveries/${data.airline_icao}/${data.png_filename}" alt="Airline Livery">`;
+                            } else {
+                                imgContainer.innerHTML = `<p class="error">No PNG found: <strong>${data.airline_icao}</strong></p>`;
+                            }
+
+                            wrapper.classList.remove('fade-out');
+                        }, 800);
+                    }
+                })
+                .catch(err => console.error("Error fetching telemetry:", err));
+        }
+
+        // Initial fetch on load
+        fetchAircraftUpdate();
+
+        // Set up interval
+        pollInterval = setInterval(fetchAircraftUpdate, POLL_TIME);
+
+        // Optional: Instantly check when you switch back to this tab
+        document.addEventListener("visibilitychange", function() {
+            if (!document.hidden) {
+                fetchAircraftUpdate();
+            }
+        });
+    </script>
 
 </body>
 </html>
