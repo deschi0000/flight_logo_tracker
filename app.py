@@ -1,5 +1,6 @@
 import os
 from aircraft_data import COMMERCIAL_AIRCRAFT_FAMILIES
+from aircraft_icaos import LIVERY_ICAOS
 import requests
 from flask import Flask, render_template, send_from_directory
 from datetime import datetime
@@ -51,7 +52,7 @@ def index():
         altitude_check_list = [(i["flight"], i["alt_baro"]) for i in aircraft_list]
         print(altitude_check_list)
 
-        
+        a
 
         callsign = raw_data.get("flight", "").strip()
         aircraft_type = raw_data.get("t")
