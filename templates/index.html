@@ -54,11 +54,12 @@
             <!-- Everything you want to transition is wrapped inside this div -->
             <div id="fade-wrapper">
                 <div class="card">
-                    <h3>Telemetry Packet</h3>
+                    <!-- <h3>Telemetry Packet</h3> -->
                     <p><strong>Flight / Callsign:</strong> <span id="flight-val">Loading...</span></p>
                     <p><strong>Registration:</strong> <span id="reg-val">Loading...</span></p>
                     <p><strong>Parsed Airline ICAO:</strong> <span id="icao-val">Loading...</span></p>
                     <p><strong>Aircraft Type Code:</strong> <span id="type-val">Loading...</span></p>
+                    <p><strong>Altitude</strong> <span id="alt_geom">Loading...</span></p>
                 </div>
 
                 <div class="card" id="image-container">
@@ -89,6 +90,7 @@
                                     document.getElementById('reg-val').innerText = data.registration;
                                     document.getElementById('icao-val').innerText = data.airline_icao;
                                     document.getElementById('type-val').innerText = data.aircraft_type;
+                                    document.getElementById('alt_geom').innerText = data.alt_geom + " ft";
 
                                     const imgContainer = document.getElementById('image-container');
                                     if (data.png_filename) {

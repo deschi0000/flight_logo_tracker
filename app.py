@@ -50,9 +50,13 @@ def current_aircraft():
 
             if acceptable_aircrafts_list:
                 raw_data = acceptable_aircrafts_list[0]
+
+                print(raw_data) # Debug
+
                 callsign = raw_data.get("flight", "").strip()
                 airline_icao = "".join([c for c in callsign if c.isalpha()])[:3].upper()
                 aircraft_type = raw_data.get("t", "N/A")
+                alt_geom = raw_data.get("alt_geom", "N/A")
                 pure_type = COMMERCIAL_AIRCRAFT_FAMILIES.get(aircraft_type, "N/A")
                 livery_png_type_name = f"{airline_icao}_{pure_type}.png"
                 
@@ -70,6 +74,7 @@ def current_aircraft():
         }
         airline_icao = "N/A"
         aircraft_type = "N/A"
+        alt_geom = "N/A"
         livery_png_type_name = None
 
     # Return pure JSON data to the frontend
@@ -78,6 +83,7 @@ def current_aircraft():
         "registration": raw_data.get("r", "N/A"),
         "airline_icao": airline_icao,
         "aircraft_type": aircraft_type,
+        "alt_geom": alt_geom,
         "png_filename": livery_png_type_name if livery_png_type_name != "N/A_N/A.png" else None
     })
 
