@@ -9,8 +9,10 @@ from datetime import datetime
 app = Flask(__name__, static_folder="static")
 
 # Coordinates for Sursee / Central Switzerland and radius in nautical miles
-LAT = 47.17
-LON = 8.11
+# LAT = 47.17
+# LON = 8.11
+LAT = 24.190120
+LON = 120.616808
 RADIUS = 15
 ADSB_URL = f"https://api.adsb.lol/v2/point/{LAT}/{LON}/{RADIUS}"
 
@@ -35,7 +37,7 @@ def current_aircraft():
     headers = {"User-Agent": "FlightLogoTracker/1.0"}
 
     try:
-        # Identify the app to the API and bypass any Windows/VPN system proxiess
+        # Identify the app to the API and bypass any Windows/VPN system proxies
         response = requests.get(
             ADSB_URL, 
             headers=headers,

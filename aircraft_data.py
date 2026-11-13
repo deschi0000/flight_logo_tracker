@@ -91,6 +91,7 @@ COMMERCIAL_AIRCRAFT_FAMILIES = {
     "AT45": "AT7",
     "AT72": "AT7",
     "AT7":  "AT7",  # ATR 72 series
+    "AT76":  "AT7",  # ATR 72 series
     "DH8A": "DH8",
     "DH8B": "DH8",
     "DH8C": "DH8",
