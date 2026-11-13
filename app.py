@@ -35,7 +35,13 @@ def current_aircraft():
     headers = {"User-Agent": "FlightLogoTracker/1.0"}
 
     try:
-        response = requests.get(ADSB_URL, headers=headers)
+        # Identify the app to the API and bypass any Windows/VPN system proxiess
+        response = requests.get(
+            ADSB_URL, 
+            headers=headers,
+            proxies={"http": "", "https": ""},
+            timeout=10
+            )
         if response.status_code == 200:
             data = response.json()
             aircraft_list = data.get("ac", [])
